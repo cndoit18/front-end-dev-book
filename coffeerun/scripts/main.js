@@ -12,7 +12,7 @@
     var CheckList = App.CheckList;
     var remoteDS = new RemoteDataStore(SERVER_URL);
 
-    var myTruck = new Truck('Serenity', remoteDS);
+    var myTruck = new Truck('Serenity', new DataStore());
     window.myTruck = myTruck;
 
     var checkList = new CheckList(CHECKLIST_SELECTOR);
@@ -20,9 +20,11 @@
     var formHandler = new FormHandler(FORM_SELECTOR);
 
     formHandler.addSubmitHandler(function (data) {
-        checkList.addRow.call(checkList, data);
-        myTruck.createOrder.call(myTruck, data);
+        return myTruck.createOrder.call(myTruck, data).then(function () {
+            checkList.addRow.call(checkList, data);
+        });
     });
 
     formHandler.addInputHandler(Validation.isCompanyEmail);
+    myTruck.printOrders(checkList.addRow.bind(checkList));
 })(window);
