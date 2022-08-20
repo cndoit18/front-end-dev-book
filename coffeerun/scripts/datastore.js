@@ -8,7 +8,7 @@
 
     DataStore.prototype.add = function (key, val) {
         this.data[key] = val;
-    }
+    };
 
     DataStore.prototype.get = function (key) {
         return this.data[key];

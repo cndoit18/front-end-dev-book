@@ -7,7 +7,7 @@
         if (!selector) {
             throw new Error('No selector provided');
         }
-        
+
         this.$formElement = $(selector);
         if (this.$formElement.length === 0) {
             throw new Error('Cloud not find element with selector: ' + selector);
@@ -19,10 +19,12 @@
         this.$formElement.on('submit', function (event) {
             event.preventDefault();
             var data = {};
-            $(this).serializeArray().forEach(function (item) {
-                data[item.name] = item.value;
-                console.log(item.name + ' is ' + item.value);
-            });
+            $(this)
+                .serializeArray()
+                .forEach(function (item) {
+                    data[item.name] = item.value;
+                    console.log(item.name + ' is ' + item.value);
+                });
             console.log(data);
             fn(data);
             this.reset();
@@ -46,5 +48,4 @@
 
     App.FormHandler = FormHandler;
     window.App = App;
-    
 })(window);

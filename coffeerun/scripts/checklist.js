@@ -18,7 +18,7 @@
     function Row(coffeeOrder) {
         var $div = $('<div></div>', {
             'data-coffee-order': 'checkbox',
-            'class': 'checkbox'
+            class: 'checkbox'
         });
         var $label = $('<label></label>');
 
@@ -53,15 +53,19 @@
             .find('[value="' + email + '"]')
             .closest('[data-coffee-order="checkbox"]')
             .remove();
-    }
+    };
 
     CheckList.prototype.addClickHandler = function (fn) {
-        this.$element.on('click', 'input', function (event) {
-            var email = event.target.value;
-            this.removeRow(email);
-            fn(email);
-        }.bind(this));
-    }
+        this.$element.on(
+            'click',
+            'input',
+            function (event) {
+                var email = event.target.value;
+                this.removeRow(email);
+                fn(email);
+            }.bind(this)
+        );
+    };
 
     App.CheckList = CheckList;
     window.App = App;

@@ -1,6 +1,6 @@
 (function (window) {
     'use strict';
-    var App = window.App || {}
+    var App = window.App || {};
 
     var Validation = {
         isCompanyEmail: function (email) {
