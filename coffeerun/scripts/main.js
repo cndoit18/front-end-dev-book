@@ -2,7 +2,7 @@
     'use strict';
     var FORM_SELECTOR = '[data-coffee-order="form"]';
     var CHECKLIST_SELECTOR = '[data-coffee-order="checklist"]';
-    var SERVER_URL = 'http://coffeerun-v2-rest-api.herokuapp.com/api/coffeeorders';
+    var SERVER_URL = 'http://127.0.0.1:8000';
     var App = window.App;
     var Truck = App.Truck;
     var DataStore = App.DataStore;
@@ -20,8 +20,8 @@
     var formHandler = new FormHandler(FORM_SELECTOR);
 
     formHandler.addSubmitHandler(function (data) {
-        myTruck.createOrder.bind(myTruck, data);
         checkList.addRow.call(checkList, data);
+        myTruck.createOrder.call(myTruck, data);
     });
 
     formHandler.addInputHandler(Validation.isCompanyEmail);
