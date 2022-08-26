@@ -1,14 +1,36 @@
 import socket from './ws-client';
+import { ChatForm, ChatList, promptForUsername } from './dom';
+import { UserStore } from './storage';
+
+const FORM_SELECTOR = '[data-chat="chat-form"]';
+const INPUT_SELECTOR = '[data-chat="message-input"]';
+const LIST_SELECTOR = '[data-chat="message-list"]';
+
+let userStore = new UserStore('x-chattrbox/u');
+let username = userStore.get();
+if (!username) {
+    username = promptForUsername();
+    userStore.set(username);
+}
 
 class ChatApp {
     constructor() {
+        this.chatForm = new ChatForm(FORM_SELECTOR, INPUT_SELECTOR);
+        this.chatList = new ChatList(LIST_SELECTOR, username);
+
         socket.init('ws://localhost:3001');
         socket.registerOpenHandler(() => {
-            let message = new ChatMessage({ message: 'pow!' });
-            socket.sendMessage(message.serialize());
+            this.chatForm.init((data) => {
+                let message = new ChatMessage({ message: data });
+                socket.sendMessage(message.serialize());
+            });
         });
+        this.chatList.init();
         socket.registerMessageHandler((data) => {
             console.log(data);
+            let message = new ChatMessage(data);
+            console.log(message);
+            this.chatList.drawMessage(message.serialize());
         });
     }
 }
@@ -22,7 +44,7 @@ class ChatMessage {
     serialize() {
         return {
             user: this.user,
-            meesage: this.message,
+            message: this.message,
             timestamp: this.timestamp
         };
     }
